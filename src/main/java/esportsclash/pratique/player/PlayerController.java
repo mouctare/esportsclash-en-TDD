@@ -10,16 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/players")
 public class PlayerController {
-    private final PlayerRepository playerRepository;
+    private CreatePlayerUseCase createPlayerUseCase;
 
-    public PlayerController(PlayerRepository playerRepository){
-        this.playerRepository = playerRepository;
+    public PlayerController(CreatePlayerUseCase createPlayerUseCase){
+        this.createPlayerUseCase = createPlayerUseCase;
     }
 
     @PostMapping
     public ResponseEntity<PlayerIdResponse> createPlayer(@RequestBody CreatePlayerDTO createPlayerDTO){
-        var playerUseCase = new CreatePlayerUseCase(playerRepository);
-        var result = playerUseCase.execute(createPlayerDTO.getName());
+       var result = this.createPlayerUseCase.execute(createPlayerDTO.getName());
         return new ResponseEntity<>(new PlayerIdResponse(result.getId()), HttpStatus.CREATED);
     }
 }

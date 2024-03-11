@@ -1,4 +1,4 @@
-package esportsclash.pratique.player;
+package esportsclash.pratique.player.domain.model;
 
 public class Player {
     private String id;

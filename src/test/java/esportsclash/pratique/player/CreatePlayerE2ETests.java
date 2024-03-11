@@ -1,6 +1,9 @@
 package esportsclash.pratique.player;
 
 import esportsclash.pratique.MySQLContainerTestConfiguration;
+import esportsclash.pratique.player.domain.viewmodel.PlayerIdResponse;
+import esportsclash.pratique.player.infrastructure.persistance.ram.InMemoryPlayerRepository;
+import esportsclash.pratique.player.infrastructure.spring.CreatePlayerDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +28,7 @@ public class CreatePlayerE2ETests {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private InMemoryPlayerRepository playerRepository;
 
     @Test
     public void shouldCreatePlayer() throws Exception {
@@ -44,7 +47,7 @@ public class CreatePlayerE2ETests {
                PlayerIdResponse.class
        );
 
-       var player = playerRepository.find(idResponse.getId());
+       var player = playerRepository.findById(idResponse.getId());
 
         Assert.assertNotNull(player);
         Assert.assertEquals(playerDto.getName(), player.getName());

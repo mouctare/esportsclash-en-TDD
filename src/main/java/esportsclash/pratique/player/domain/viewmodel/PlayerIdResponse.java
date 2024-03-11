@@ -1,4 +1,4 @@
-package esportsclash.pratique.player;
+package esportsclash.pratique.player.domain.viewmodel;
 
 public class PlayerIdResponse {
     private String id;

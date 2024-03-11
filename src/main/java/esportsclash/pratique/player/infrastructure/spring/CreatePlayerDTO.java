@@ -1,4 +1,4 @@
-package esportsclash.pratique.player;
+package esportsclash.pratique.player.infrastructure.spring;
 
 public class CreatePlayerDTO {
     private String name;

@@ -1,9 +1,12 @@
-package esportsclash.pratique.player;
+package esportsclash.pratique.player.infrastructure.persistance.ram;
+
+import esportsclash.pratique.player.application.ports.PlayerRepository;
+import esportsclash.pratique.player.domain.model.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerRepository {
+public class InMemoryPlayerRepository implements PlayerRepository {
 
   // This class represents a simple in-memory player repository.
   private Map<String, Player> players = new HashMap<>();
@@ -14,7 +17,8 @@ public class PlayerRepository {
    * @param playerId The ID of the player to find.
    * @return The player object if found, null otherwise.
    */
-  public Player find(String playerId) {
+  @Override
+  public Player findById(String playerId) {
     return players.get(playerId);
   }
 
@@ -23,6 +27,7 @@ public class PlayerRepository {
    *
    * @param player The player object to save.
    */
+  @Override
   public void save(Player player) {
     this.players.put(player.getId(), player);
   }

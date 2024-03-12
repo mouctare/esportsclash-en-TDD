@@ -29,7 +29,7 @@ public class CreatePlayerTests {
         var expectedPlayer = new Player(result.getId(), "name");
 
         // - Retrieve the actual player created from the repository using the expected ID.
-        Player actualPlayer = repository.findById(expectedPlayer.getId());
+        Player actualPlayer = repository.findById(expectedPlayer.getId()).get();
 
         // - Assert that the name of the actual player created matches the expected name.
         Assert.assertEquals(expectedPlayer.getName(), actualPlayer.getName());

@@ -5,6 +5,7 @@ import esportsclash.pratique.player.domain.model.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class InMemoryPlayerRepository implements PlayerRepository {
 
@@ -18,8 +19,8 @@ public class InMemoryPlayerRepository implements PlayerRepository {
    * @return The player object if found, null otherwise.
    */
   @Override
-  public Player findById(String playerId) {
-    return players.get(playerId);
+  public Optional<Player> findById(String playerId) {
+    return Optional.ofNullable(this.players.get(playerId));
   }
 
   /**

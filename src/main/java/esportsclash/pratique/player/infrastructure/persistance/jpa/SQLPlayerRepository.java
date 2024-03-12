@@ -3,6 +3,8 @@ package esportsclash.pratique.player.infrastructure.persistance.jpa;
 import esportsclash.pratique.player.application.ports.PlayerRepository;
 import esportsclash.pratique.player.domain.model.Player;
 
+import java.util.Optional;
+
 public class SQLPlayerRepository implements PlayerRepository {
     private final SQLPlayerDataAccessor dataAccessor;
 
@@ -11,24 +13,12 @@ public class SQLPlayerRepository implements PlayerRepository {
     }
 
     @Override
-    public Player findById(String playerId) {
-        var sqlPlayerQuery = dataAccessor.findById(playerId);
-        if (sqlPlayerQuery.isEmpty()) {
-            return null;
-        }
-
-        var sqlPlayer = sqlPlayerQuery.get();
-
-        var player = new Player(sqlPlayer.getId(), sqlPlayer.getName());
-        return player;
+    public Optional<Player> findById(String playerId) {
+       return dataAccessor.findById(playerId);
     }
 
     @Override
     public void save(Player player) {
-        var sqlPlayer = new SQLPlayer(
-                player.getId(),
-                player.getName()
-        );
-        dataAccessor.save(sqlPlayer);
+        dataAccessor.save(player);
     }
 }

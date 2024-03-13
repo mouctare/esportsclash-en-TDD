@@ -13,7 +13,8 @@ public class SQLPlayerRepository extends SQLBaseRepository<Player> implements Pl
 
     @Override
     public Class<Player> getEntityClass() {
-        return null;
+        return Player.class;
     }
+
 
 }

@@ -6,4 +6,5 @@ import esportsclash.pratique.player.domain.model.Player;
 
 public interface PlayerRepository extends BaseRepository<Player> {
 
+
 }

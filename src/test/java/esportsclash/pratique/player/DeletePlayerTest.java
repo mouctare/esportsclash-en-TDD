@@ -1,40 +1,40 @@
 package esportsclash.pratique.player;
 
 import esportsclash.pratique.core.domain.exception.NotFoundException;
-import esportsclash.pratique.player.application.usecases.RenamePlayerCommand;
-import esportsclash.pratique.player.application.usecases.RenamePlayerCommandHandler;
+import esportsclash.pratique.player.application.usecases.DeletePlayerCommandHandler;
+import esportsclash.pratique.player.application.usecases.DeletePlayerCommand;
 import esportsclash.pratique.player.domain.model.Player;
 import esportsclash.pratique.player.infrastructure.persistance.ram.InMemoryPlayerRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-public class RenamePlayerTest {
+public class DeletePlayerTest {
     private final InMemoryPlayerRepository playerRepository = new InMemoryPlayerRepository();
-   private RenamePlayerCommandHandler createHandler(){
+   private DeletePlayerCommandHandler deleteHandler(){
 
-       return new RenamePlayerCommandHandler(playerRepository);
+       return new DeletePlayerCommandHandler(playerRepository);
 
    }
     @Test
-    void shouldRenamePlayer(){
+    void shouldDeletePlayer(){
         var player = new Player("123", "old name");
         playerRepository.save(player);
 
-        var command = new RenamePlayerCommand(player.getId(), "new name");
+        var command = new DeletePlayerCommand("123");
 
-        var commandHandler = createHandler();
+        var commandHandler = deleteHandler();
         commandHandler.handle(command);
 
-        Player actualPlayer = playerRepository.findById(player.getId()).get();
+        var playerQuery = playerRepository.findById(player.getId());
 
-        Assert.assertEquals(command.getName(), actualPlayer.getName());
+        Assert.assertTrue(playerQuery.isEmpty());
 
     }
 
     @Test
     void whenPlayerDoesNotExist_shouldThrowNotFound(){
-        var command = new RenamePlayerCommand("garbage", "new name");
-        var commandHandler = createHandler();
+        var command = new DeletePlayerCommand("garbage");
+        var commandHandler = deleteHandler();
 
         var exception = Assert.assertThrows(NotFoundException.class,
                 () -> commandHandler.handle(command));

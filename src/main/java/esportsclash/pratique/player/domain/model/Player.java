@@ -8,10 +8,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "players")
 
-public class Player {
-
-    @Id
-    private String id;
+public class Player extends BaseEntity {
     @Column
     private String name;
 

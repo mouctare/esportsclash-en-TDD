@@ -1,29 +1,18 @@
 package esportsclash.pratique.player.infrastructure.persistance.jpa;
 
+import esportsclash.pratique.core.infrastructure.persistance.sql.SQLBaseRepository;
 import esportsclash.pratique.player.application.ports.PlayerRepository;
 import esportsclash.pratique.player.domain.model.Player;
+import jakarta.persistence.EntityManager;
 
-import java.util.Optional;
+public class SQLPlayerRepository extends SQLBaseRepository<Player> implements PlayerRepository {
 
-public class SQLPlayerRepository implements PlayerRepository {
-    private final SQLPlayerDataAccessor dataAccessor;
-
-    public SQLPlayerRepository(SQLPlayerDataAccessor dataAccessor) {
-        this.dataAccessor = dataAccessor;
+    public SQLPlayerRepository(EntityManager entityManager) {
+        super(entityManager);
     }
 
     @Override
-    public Optional<Player> findById(String playerId) {
-       return dataAccessor.findById(playerId);
-    }
-
-    @Override
-    public void save(Player player) {
-        dataAccessor.save(player);
-    }
-
-    @Override
-    public void delete(Player player) {
-        dataAccessor.delete(player);
+    public Class<Player> getEntityClass() {
+        return Player.class;
     }
 }

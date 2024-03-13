@@ -17,9 +17,12 @@ public class RenamePlayerCommandHandler implements Command.Handler<RenamePlayerC
 
     @Override
     public Void handle(RenamePlayerCommand renamePlayerCommand) {
-        var player = playerRepository.findById(renamePlayerCommand.getId()).orElseThrow(
-                () -> new NotFoundException("Player", renamePlayerCommand.getId()));
+        Optional<Player> playerQuery = playerRepository.findById(renamePlayerCommand.getId());
+        if (playerQuery.isEmpty()){
+            throw new NotFoundException("Player", renamePlayerCommand.getId());
+        }
 
+        Player player = playerQuery.get();
         player.rename(renamePlayerCommand.getName());
         playerRepository.save(player);
         return null;

@@ -9,20 +9,16 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 public class RenamePlayerTest {
-    private final InMemoryPlayerRepository playerRepository = new InMemoryPlayerRepository();
-   private RenamePlayerCommandHandler createHandler(){
 
-       return new RenamePlayerCommandHandler(playerRepository);
-
-   }
     @Test
     void shouldRenamePlayer(){
+        var playerRepository = new InMemoryPlayerRepository();
         var player = new Player("123", "old name");
         playerRepository.save(player);
 
         var command = new RenamePlayerCommand(player.getId(), "new name");
 
-        var commandHandler = createHandler();
+        var commandHandler = new RenamePlayerCommandHandler(playerRepository);
         commandHandler.handle(command);
 
         Player actualPlayer = playerRepository.findById(player.getId()).get();
@@ -33,8 +29,9 @@ public class RenamePlayerTest {
 
     @Test
     void whenPlayerDoesNotExist_shouldThrowNotFound(){
+        var playerRepository = new InMemoryPlayerRepository();
         var command = new RenamePlayerCommand("garbage", "new name");
-        var commandHandler = createHandler();
+        var commandHandler = new RenamePlayerCommandHandler(playerRepository);
 
         var exception = Assert.assertThrows(NotFoundException.class,
                 () -> commandHandler.handle(command));

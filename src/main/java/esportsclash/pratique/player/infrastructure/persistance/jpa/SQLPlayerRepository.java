@@ -10,9 +10,12 @@ public class SQLPlayerRepository extends SQLBaseRepository<Player> implements Pl
     public SQLPlayerRepository(EntityManager entityManager) {
         super(entityManager);
     }
+<<<<<<< HEAD
 
     @Override
     public Class<Player> getEntityClass() {
         return Player.class;
     }
+=======
+>>>>>>> parent of fc30f66 (Mise en place du CRUD PLayer avec les tests nécéssaires)
 }

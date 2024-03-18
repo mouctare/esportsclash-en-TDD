@@ -9,16 +9,22 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 public class RegisterCommandHandlerTest {
+   private UserRepository repository = new InMemoryUserRepository();
+
+   public RegisterCommandHandler createCommandHandler(){
+       return new RegisterCommandHandler(repository);
+   }
     @Test
     public void shouldRegister(){
-        UserRepository repository = new InMemoryUserRepository();
         RegisterCommand command = new RegisterCommand("test@yahoo.fr", "password");
-        RegisterCommandHandler commandHandler = new RegisterCommandHandler(repository);
+        RegisterCommandHandler commandHandler = createCommandHandler();
 
         var response = commandHandler.handle(command);
 
         var actualUser = repository.findById(response.getId()).get();
 
-        Assert.assertEquals("test@yahoo.fr", actualUser.getEmailAdresse());
+        Assert.assertEquals(command.getEmailAdresse(), actualUser.getEmailAdresse());
+        Assert.assertEquals(command.getPassword(), actualUser.getPassword());
+
     }
 }

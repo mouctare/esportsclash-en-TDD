@@ -8,6 +8,12 @@ public abstract class BaseEntity {
     @Id
     protected String id;
 
+    public BaseEntity() {
+    }
+
+    public BaseEntity(String id) {
+    }
+
     public String getId() {
         return id;
     }

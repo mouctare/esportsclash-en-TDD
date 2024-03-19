@@ -12,16 +12,13 @@ public class RegisterCommandHandler implements Command.Handler<RegisterCommand, 
     private final UserRepository repository;
 
     // Injection de l'interface
-    private PasswordHasher passwordHasher;
+    private final PasswordHasher passwordHasher;
 
     public RegisterCommandHandler(UserRepository repository, PasswordHasher passwordHasher) {
         this.repository = repository;
         this.passwordHasher = passwordHasher;
     }
 
-    public RegisterCommandHandler(UserRepository repository){
-        this.repository = repository;
-    }
     @Override
     public IdResponse handle(RegisterCommand command) {
          var user = new User(

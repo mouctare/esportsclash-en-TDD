@@ -6,15 +6,22 @@ import esportsclash.pratique.auth.application.services.passwordHasher.BcryptPass
 import esportsclash.pratique.auth.application.services.passwordHasher.PasswordHasher;
 import esportsclash.pratique.auth.application.useCases.RegisterCommand;
 import esportsclash.pratique.auth.application.useCases.RegisterCommandHandler;
+import esportsclash.pratique.auth.domain.model.User;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RegisterCommandHandlerTest {
-   private UserRepository repository = new InMemoryUserRepository();
+   private InMemoryUserRepository repository = new InMemoryUserRepository();
    private PasswordHasher passwordHasher = new BcryptPasswordHasher();
 
    public RegisterCommandHandler createCommandHandler(){
        return new RegisterCommandHandler(repository, passwordHasher);
+   }
+
+   @BeforeEach
+   public void setup(){
+       repository.clear();
    }
     @Test
     public void shouldRegister(){
@@ -30,4 +37,20 @@ public class RegisterCommandHandlerTest {
              passwordHasher.match(command.getPassword(), actualUser.getPassword()));
 
     }
+
+    @Test
+    public void whenEmailAddressIsInUse_shouldThrow(){
+       var existingUser = new User("123", "test@yahoo.fr", "password");
+           repository.save(existingUser);
+
+        RegisterCommand command = new RegisterCommand(existingUser.getEmailAdresse(), "password");
+        var commandHandler = createCommandHandler();
+        var exception = Assert.assertThrows(
+                IllegalArgumentException.class,
+                () -> commandHandler.handle(command)
+        );
+
+        Assert.assertEquals("Email address is already in use",
+        exception.getMessage());
+   }
 }

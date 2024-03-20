@@ -1,16 +1,13 @@
-package esportsclash.pratique.auth.domain.model;
+package esportsclash.pratique.auth.application.infrastructure.spring;
 
-import esportsclash.pratique.player.domain.model.BaseEntity;
-
-public class User extends BaseEntity {
+public class RegisterDTO {
     private String emailAddress;
     private String password;
 
-    public User() {
-    }
+    public RegisterDTO() {
 
-    public User(String id, String emailAddress, String password) {
-        super(id);
+    }
+    public RegisterDTO(String emailAddress, String password) {
         this.emailAddress = emailAddress;
         this.password = password;
     }
@@ -30,6 +27,4 @@ public class User extends BaseEntity {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 }

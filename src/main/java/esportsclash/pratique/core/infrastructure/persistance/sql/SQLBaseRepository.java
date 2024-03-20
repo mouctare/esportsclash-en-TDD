@@ -29,4 +29,9 @@ public abstract class SQLBaseRepository<T extends BaseEntity> implements BaseRep
     public Optional findById(String id) {
         return Optional.ofNullable(entityManager.find(getEntityClass(), id));
     }
+
+    @Override
+    public void clear(){
+        entityManager.createQuery("DELETE FROM " + getEntityClass().getSimpleName()).executeUpdate();
+    }
 }

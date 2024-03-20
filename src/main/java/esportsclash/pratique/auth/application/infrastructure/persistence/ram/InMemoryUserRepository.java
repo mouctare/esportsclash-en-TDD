@@ -9,6 +9,6 @@ public class InMemoryUserRepository extends InMemoryBaseRepository<User> impleme
     public boolean isEmailAddressAvailable(String emailAddress) {
         return entities
                 .values().stream()
-                .noneMatch(user -> user.getEmailAdresse().equals(emailAddress));
+                .noneMatch(user -> user.getEmailAddress().equals(emailAddress));
     }
 }

@@ -1,10 +1,12 @@
 package esportsclash.pratique.auth.application.useCases;
 
 import an.awesome.pipelinr.Command;
+import esportsclash.pratique.auth.application.exceptions.EmailAddressUnavailableException;
 import esportsclash.pratique.auth.application.ports.UserRepository;
 import esportsclash.pratique.auth.application.services.passwordHasher.PasswordHasher;
 import esportsclash.pratique.auth.domain.model.User;
 import esportsclash.pratique.auth.domain.model.viewModel.IdResponse;
+import esportsclash.pratique.core.domain.exception.BadRequestException;
 
 import java.util.UUID;
 
@@ -24,7 +26,7 @@ public class RegisterCommandHandler implements Command.Handler<RegisterCommand, 
         var isEmailAddressAvailable = repository.isEmailAddressAvailable(command.getEmailAdresse());
 
         if (isEmailAddressAvailable == false){
-            throw new IllegalArgumentException("Email address is already in use");
+            throw new EmailAddressUnavailableException();
         }
          var user = new User(
                 UUID.randomUUID().toString(),

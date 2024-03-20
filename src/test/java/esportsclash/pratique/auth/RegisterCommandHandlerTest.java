@@ -1,12 +1,13 @@
 package esportsclash.pratique.auth;
 
+import esportsclash.pratique.auth.application.exceptions.EmailAddressUnavailableException;
 import esportsclash.pratique.auth.application.infrastructure.persistence.ram.InMemoryUserRepository;
-import esportsclash.pratique.auth.application.ports.UserRepository;
 import esportsclash.pratique.auth.application.services.passwordHasher.BcryptPasswordHasher;
 import esportsclash.pratique.auth.application.services.passwordHasher.PasswordHasher;
 import esportsclash.pratique.auth.application.useCases.RegisterCommand;
 import esportsclash.pratique.auth.application.useCases.RegisterCommandHandler;
 import esportsclash.pratique.auth.domain.model.User;
+import esportsclash.pratique.core.domain.exception.BadRequestException;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class RegisterCommandHandlerTest {
 
         var actualUser = repository.findById(response.getId()).get();
 
-        Assert.assertEquals(command.getEmailAdresse(), actualUser.getEmailAdresse());
+        Assert.assertEquals(command.getEmailAdresse(), actualUser.getEmailAddress());
         Assert.assertTrue(
              passwordHasher.match(command.getPassword(), actualUser.getPassword()));
 
@@ -43,14 +44,11 @@ public class RegisterCommandHandlerTest {
        var existingUser = new User("123", "test@yahoo.fr", "password");
            repository.save(existingUser);
 
-        RegisterCommand command = new RegisterCommand(existingUser.getEmailAdresse(), "password");
+        RegisterCommand command = new RegisterCommand(existingUser.getEmailAddress(), "password");
         var commandHandler = createCommandHandler();
-        var exception = Assert.assertThrows(
-                IllegalArgumentException.class,
+        Assert.assertThrows(
+                EmailAddressUnavailableException.class,
                 () -> commandHandler.handle(command)
         );
-
-        Assert.assertEquals("Email address is already in use",
-        exception.getMessage());
    }
 }

@@ -1,5 +1,6 @@
 package esportsclash.pratique.auth;
 
+import esportsclash.pratique.IntegrationTests;
 import esportsclash.pratique.MySQLContainerTestConfiguration;
 import esportsclash.pratique.auth.application.infrastructure.spring.LoginDTO;
 import esportsclash.pratique.auth.application.infrastructure.spring.RegisterDTO;
@@ -22,21 +23,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
-@Import(MySQLContainerTestConfiguration.class)
-public class LoginE2ETests {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private UserRepository userRepository;
-
+public class LoginE2ETests extends IntegrationTests {
     @Autowired
     private PasswordHasher passwordHasher;
 
@@ -82,7 +70,8 @@ public class LoginE2ETests {
          mockMvc
                 .perform(MockMvcRequestBuilders.post("/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(registerDto)))
+                        .content(objectMapper.writeValueAsString(registerDto))
+                        .header("Authorization", createJWT()))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }

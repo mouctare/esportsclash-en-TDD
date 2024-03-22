@@ -5,19 +5,19 @@ import an.awesome.pipelinr.Command;
 import esportsclash.pratique.auth.domain.model.viewModel.IdResponse;
 
 public class RegisterCommand implements Command<IdResponse> {
-    private String emailAdresse;
+    private String emailAddress;
     private String password;
 
     public RegisterCommand(){
 
     }
     public RegisterCommand(String emailAdresse,String password){
-        this.emailAdresse = emailAdresse;
+        this.emailAddress = emailAdresse;
         this.password = password;
     }
 
-    public String getEmailAdresse() {
-        return emailAdresse;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
     public String getPassword() {

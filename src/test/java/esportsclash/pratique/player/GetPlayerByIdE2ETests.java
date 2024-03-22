@@ -1,34 +1,16 @@
 package esportsclash.pratique.player;
 
-import esportsclash.pratique.MySQLContainerTestConfiguration;
+import esportsclash.pratique.IntegrationTests;
 import esportsclash.pratique.player.application.ports.PlayerRepository;
 import esportsclash.pratique.player.domain.model.Player;
 import esportsclash.pratique.player.domain.viewmodel.PlayerViewModel;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Import(MySQLContainerTestConfiguration.class)
-@Transactional
-
-public class GetPlayerByIdE2ETests {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
+public class GetPlayerByIdE2ETests extends IntegrationTests {
     @Autowired
     private PlayerRepository playerRepository;
 
@@ -40,7 +22,10 @@ public class GetPlayerByIdE2ETests {
 
         // When
        var result = mockMvc
-               .perform(MockMvcRequestBuilders.get("/players/" + player.getId()))
+               .perform(MockMvcRequestBuilders
+                       .get("/players/" + player.getId())
+                       .header("Authorization", createJWT())
+               )
                        .andReturn();
        var viewModel = objectMapper.readValue(
                result.getResponse().getContentAsString(),
@@ -55,7 +40,8 @@ public class GetPlayerByIdE2ETests {
     @Test
     public void whenPlayerDoesNotExist_shouldFail() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/players/garbage/"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/players/garbage/")
+                        .header("Authorization", createJWT()))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

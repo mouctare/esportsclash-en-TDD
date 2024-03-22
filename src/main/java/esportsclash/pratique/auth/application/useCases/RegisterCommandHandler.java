@@ -6,7 +6,6 @@ import esportsclash.pratique.auth.application.ports.UserRepository;
 import esportsclash.pratique.auth.application.services.passwordHasher.PasswordHasher;
 import esportsclash.pratique.auth.domain.model.User;
 import esportsclash.pratique.auth.domain.model.viewModel.IdResponse;
-import esportsclash.pratique.core.domain.exception.BadRequestException;
 
 import java.util.UUID;
 
@@ -23,14 +22,14 @@ public class RegisterCommandHandler implements Command.Handler<RegisterCommand, 
 
     @Override
     public IdResponse handle(RegisterCommand command) {
-        var isEmailAddressAvailable = repository.isEmailAddressAvailable(command.getEmailAdresse());
+        var isEmailAddressAvailable = repository.isEmailAddressAvailable(command.getEmailAddress());
 
         if (isEmailAddressAvailable == false){
             throw new EmailAddressUnavailableException();
         }
          var user = new User(
                 UUID.randomUUID().toString(),
-                command.getEmailAdresse(),
+                command.getEmailAddress(),
                  passwordHasher.hash(command.getPassword()
                 ));
          repository.save(user);

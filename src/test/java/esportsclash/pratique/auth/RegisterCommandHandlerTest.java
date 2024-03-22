@@ -7,7 +7,6 @@ import esportsclash.pratique.auth.application.services.passwordHasher.PasswordHa
 import esportsclash.pratique.auth.application.useCases.RegisterCommand;
 import esportsclash.pratique.auth.application.useCases.RegisterCommandHandler;
 import esportsclash.pratique.auth.domain.model.User;
-import esportsclash.pratique.core.domain.exception.BadRequestException;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,9 +32,9 @@ public class RegisterCommandHandlerTest {
 
         var actualUser = repository.findById(response.getId()).get();
 
-        Assert.assertEquals(command.getEmailAdresse(), actualUser.getEmailAddress());
+        Assert.assertEquals(command.getEmailAddress(), actualUser.getEmailAddress());
         Assert.assertTrue(
-             passwordHasher.match(command.getPassword(), actualUser.getPassword()));
+             passwordHasher.match(command.getPassword(), actualUser.getPasswordHash()));
 
     }
 

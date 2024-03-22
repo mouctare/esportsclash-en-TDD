@@ -1,34 +1,17 @@
 package esportsclash.pratique.player;
 
-import esportsclash.pratique.MySQLContainerTestConfiguration;
+import esportsclash.pratique.IntegrationTests;
 import esportsclash.pratique.player.application.ports.PlayerRepository;
 import esportsclash.pratique.player.domain.viewmodel.PlayerIdResponse;
 import esportsclash.pratique.player.infrastructure.spring.CreatePlayerDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
-@Import(MySQLContainerTestConfiguration.class)
-public class CreatePlayerE2ETests {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
+public class CreatePlayerE2ETests extends IntegrationTests {
     @Autowired
     private PlayerRepository playerRepository;
 
@@ -40,7 +23,9 @@ public class CreatePlayerE2ETests {
        var result = mockMvc
                 .perform(MockMvcRequestBuilders.post("/players")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(playerDto)))
+                        .content(objectMapper.writeValueAsString(playerDto))
+                        .header("Authorization", createJWT())
+                    )
                .andExpect(MockMvcResultMatchers.status().isCreated())
                .andReturn();
 

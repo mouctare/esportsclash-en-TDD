@@ -1,32 +1,16 @@
 package esportsclash.pratique.player;
 
-import esportsclash.pratique.MySQLContainerTestConfiguration;
+import esportsclash.pratique.IntegrationTests;
 import esportsclash.pratique.player.application.ports.PlayerRepository;
 import esportsclash.pratique.player.domain.model.Player;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Import(MySQLContainerTestConfiguration.class)
 
-@Transactional
-public class DeletePlayerE2ETests {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+public class DeletePlayerE2ETests extends IntegrationTests {
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -38,7 +22,9 @@ public class DeletePlayerE2ETests {
         playerRepository.save(existingPlayer);
 
         // When
-        mockMvc.perform(MockMvcRequestBuilders.delete("/players/" + existingPlayer.getId()))
+        mockMvc
+                .perform(MockMvcRequestBuilders.delete("/players/" + existingPlayer.getId()
+                        ).header("Authorization", createJWT()))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
 
         // Then
@@ -49,7 +35,8 @@ public class DeletePlayerE2ETests {
     @Test
     public void whenPlayerDoesNotExist_shouldFail() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/players/garbage/"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/players/garbage/")
+                        .header("Authorization", createJWT()))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 }

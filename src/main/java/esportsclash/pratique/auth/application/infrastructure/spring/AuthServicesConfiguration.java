@@ -18,7 +18,7 @@ public class AuthServicesConfiguration {
     public JwtService jwtService(){
         return new  ConcreteJwtService(
                 "superseketjwttokenpourlautentificationdesuser",
-                60
+                3600
         );
     }
 

@@ -1,5 +1,6 @@
 package esportsclash.pratique.player;
 
+import esportsclash.pratique.IntegrationTests;
 import esportsclash.pratique.core.domain.exception.NotFoundException;
 import esportsclash.pratique.player.application.usecases.RenamePlayerCommand;
 import esportsclash.pratique.player.application.usecases.RenamePlayerCommandHandler;
@@ -8,7 +9,7 @@ import esportsclash.pratique.player.infrastructure.persistance.ram.InMemoryPlaye
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-public class RenamePlayerTest {
+public class RenamePlayerTest extends IntegrationTests {
     private final InMemoryPlayerRepository playerRepository = new InMemoryPlayerRepository();
    private RenamePlayerCommandHandler createHandler(){
 

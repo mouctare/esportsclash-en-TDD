@@ -1,8 +1,10 @@
 package esportsclash.pratique.auth.application.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
+import esportsclash.pratique.auth.application.useCases.LoginCommand;
 import esportsclash.pratique.auth.application.useCases.RegisterCommand;
 import esportsclash.pratique.auth.domain.model.viewModel.IdResponse;
+import esportsclash.pratique.auth.domain.viewModel.LoggedInUserViewModel;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,13 @@ public class AuthController {
                HttpStatus.CREATED
        );
 
+    }
 
+    @PostMapping("/login")
+    public ResponseEntity<LoggedInUserViewModel> login(@Valid @RequestBody LoginDTO loginDTO){
+        return  ResponseEntity.ok(
+                pipeline.send(new LoginCommand(loginDTO.getEmailAddress(), loginDTO.getPassword())
+                )
+        );
     }
 }

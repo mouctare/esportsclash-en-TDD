@@ -1,6 +1,15 @@
 package esportsclash.pratique.core.domain.exception;
 
-public class NotFoundException extends RuntimeException{
+public class NotFoundException extends RuntimeException {
+
+    public NotFoundException(String entity) {
+        super(
+                String.format(
+                        "%s not found",
+                        entity
+                )
+        );
+    }
 
     public NotFoundException(String entity, String key){
         super(

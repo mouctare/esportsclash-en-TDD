@@ -5,9 +5,10 @@ import esportsclash.pratique.player.domain.model.BaseEntity;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 // Aggregate
-public class Team  extends BaseEntity {
+public class Team  extends BaseEntity<Team> {
     private String name;
     private Set<TeamMember> members;
 
@@ -15,6 +16,12 @@ public class Team  extends BaseEntity {
         this.name = name;
         this.id = id;
         this.members = new HashSet<>();
+    }
+
+    private Team(String id, String name, Set<TeamMember> members ) {
+        this.name = name;
+        this.id = id;
+        this.members = members;
     }
 
     public String getName() {
@@ -50,16 +57,28 @@ public class Team  extends BaseEntity {
                 .anyMatch(member -> member.playerId.equals(playerId) && member.role.equals(role));
     }
 
+    @Override
+    public Team deepClone() {
+        return new Team(
+                this.id,
+
+                this.name, new HashSet<>(this.members.stream().map(TeamMember::deepClone).collect(Collectors.toList())));
+    }
+
     // cette classe n'a pas de raison d'exister sans Team
-    class TeamMember {
-        private String id;
+    class TeamMember extends BaseEntity<TeamMember> {
         private String playerId;
         private Role role;
 
         public TeamMember(String id, String playerId, Role role){
-            this.id = id;
+            super(id);
             this.playerId = playerId;
             this.role = role;
+        }
+
+        @Override
+        public TeamMember deepClone() {
+            return new TeamMember(this.id, this.playerId, this.role);
         }
     }
 }

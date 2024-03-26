@@ -12,7 +12,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AddPlayerToTeamCommandTests {
+public class AddPlayerToTeamTests {
     InMemoryPlayerRepository playerRepository = new InMemoryPlayerRepository();
     InMemoryTeamRepository teamRepository = new InMemoryTeamRepository();
 

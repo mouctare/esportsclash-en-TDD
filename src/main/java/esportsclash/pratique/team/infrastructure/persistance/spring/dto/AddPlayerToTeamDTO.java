@@ -1,14 +1,17 @@
-package esportsclash.pratique.team.application.usecases;
+package esportsclash.pratique.team.infrastructure.persistance.spring.dto;
 
-import an.awesome.pipelinr.Command;
 import esportsclash.pratique.team.domain.Role;
 
-public class AddPlayerToTeamCommand implements Command<Void> {
+public class AddPlayerToTeamDTO {
     private String playerId;
     private String teamId;
-    private  Role role;
+    private String role;
 
-    public AddPlayerToTeamCommand(String playerId, String teamId, Role role) {
+    public AddPlayerToTeamDTO(){
+
+    }
+
+    public AddPlayerToTeamDTO(String playerId, String teamId, String role) {
         this.playerId = playerId;
         this.teamId = teamId;
         this.role = role;
@@ -23,6 +26,6 @@ public class AddPlayerToTeamCommand implements Command<Void> {
     }
 
     public Role getRole() {
-        return role;
+        return Role.fromString(role);
     }
 }

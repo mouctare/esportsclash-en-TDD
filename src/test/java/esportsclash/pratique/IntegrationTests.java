@@ -3,6 +3,7 @@ package esportsclash.pratique;
 import esportsclash.pratique.auth.application.ports.UserRepository;
 import esportsclash.pratique.auth.application.services.jwtservice.JwtService;
 import esportsclash.pratique.auth.domain.model.User;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,6 +29,9 @@ public class IntegrationTests {
     @Autowired
     protected JwtService jwtService;
 
+    @Autowired
+    protected EntityManager entityManager;
+
     protected String createJWT() {
         var email = "toto@yahoo.fr";
         var user = userRepository.findByEmailAddress(email).orElse(null);
@@ -39,4 +43,8 @@ public class IntegrationTests {
         return "Bearer " + jwtService.tokenize(user);
     }
 
+    protected void clearDataBseCache(){
+        entityManager.flush();
+        entityManager.clear();
+    }
 }

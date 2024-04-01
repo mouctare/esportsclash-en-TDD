@@ -10,10 +10,8 @@ import esportsclash.pratique.player.domain.viewmodel.PlayerIdResponse;
 import esportsclash.pratique.player.domain.viewmodel.PlayerViewModel;
 import esportsclash.pratique.player.infrastructure.spring.CreatePlayerDTO;
 import esportsclash.pratique.player.infrastructure.spring.RenamePlayerDTO;
-import esportsclash.pratique.team.application.usecases.AddPlayerToTeamCommand;
-import esportsclash.pratique.team.application.usecases.CreateTeamCommand;
-import esportsclash.pratique.team.application.usecases.DeleteTeamCommand;
-import esportsclash.pratique.team.application.usecases.RemovePlayerFromTeamCommand;
+import esportsclash.pratique.team.application.usecases.*;
+import esportsclash.pratique.team.domain.TeamViewModel;
 import esportsclash.pratique.team.infrastructure.persistance.spring.dto.AddPlayerToTeamDTO;
 import esportsclash.pratique.team.infrastructure.persistance.spring.dto.CreateTeamDTO;
 import esportsclash.pratique.team.infrastructure.persistance.spring.dto.RemovePlayerFromTeamDTO;
@@ -30,6 +28,12 @@ public class TeamController {
 
     public TeamController(Pipeline pipeline){
         this.pipeline = pipeline;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TeamViewModel> getTeamById(@PathVariable String id){
+        var result = this.pipeline.send(new GetTeamByIdCommand(id));
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping
@@ -63,5 +67,6 @@ public class TeamController {
         this.pipeline.send(new DeleteTeamCommand(id));
         return ResponseEntity.noContent().build();
     }
+
 
 }

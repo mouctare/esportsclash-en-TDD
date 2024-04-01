@@ -43,6 +43,10 @@ public class Team  extends BaseEntity<Team> {
         return name;
     }
 
+    public Set<TeamMember> getMembers() {
+        return members;
+    }
+
     public void addMember(String playerId, Role role) {
         if (this.members.stream().anyMatch(member -> member.playerId.equals(playerId))) {
             throw new IllegalArgumentException("Player already in team");
@@ -87,7 +91,7 @@ public class Team  extends BaseEntity<Team> {
     // cette classe n'a pas de raison d'exister sans Team
     @Entity
     @Table(name = "team_members")
-   private class TeamMember extends BaseEntity<TeamMember> {
+   public static class TeamMember extends BaseEntity<TeamMember> {
         @Column(name = "player_id")
         private String playerId;
 
@@ -121,6 +125,18 @@ public class Team  extends BaseEntity<Team> {
         @Override
         public TeamMember deepClone() {
             return new TeamMember(this.id, this.playerId,this.teamId, this.role);
+        }
+
+        public Player getPlayer() {
+            return player;
+        }
+
+        public Role getRole() {
+            return role;
+        }
+
+        public String getPlayerId() {
+            return  playerId;
         }
     }
 }

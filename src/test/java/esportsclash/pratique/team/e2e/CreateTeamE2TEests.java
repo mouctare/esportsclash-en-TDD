@@ -11,9 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class CreateTeamE2Tests extends IntegrationTests {
+public class CreateTeamE2TEests extends IntegrationTests {
     @Autowired
-    private TeamRepository teamRepository;
+    TeamRepository teamRepository;
 
     @Test
     public void shouldCreateTeam() throws Exception {

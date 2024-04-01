@@ -1,5 +1,6 @@
 package esportsclash.pratique.team.usecases;
 
+import esportsclash.pratique.core.domain.exception.BadRequestException;
 import esportsclash.pratique.core.domain.exception.NotFoundException;
 import esportsclash.pratique.player.domain.model.Player;
 import esportsclash.pratique.player.infrastructure.persistance.ram.InMemoryPlayerRepository;
@@ -83,6 +84,31 @@ public class AddPlayerToTeamTests {
 
         Assert.assertEquals(
                 "Team with the key garbage not found",
+                exception.getMessage()
+        );
+    }
+
+    @Test
+    void whenPlayerIsAlreadyInAnotherTeam_shouldThrow() {
+        var otherTeam = new Team("2", "otherTeam");
+        otherTeam.addMember(player.getId(), Role.TOP);
+        teamRepository.save(otherTeam);
+
+        var command = new AddPlayerToTeamCommand(
+                player.getId(),
+                team.getId(),
+                Role.TOP
+        );
+
+        var commandHandler = createHandler();
+
+        var exception = Assert.assertThrows(
+                BadRequestException.class,
+                ()  -> commandHandler.handle(command)
+        );
+
+        Assert.assertEquals(
+                "This player is already in a team",
                 exception.getMessage()
         );
     }

@@ -1,6 +1,7 @@
 package esportsclash.pratique.team.application.usecases;
 
 import an.awesome.pipelinr.Command;
+import esportsclash.pratique.core.domain.exception.BadRequestException;
 import esportsclash.pratique.core.domain.exception.NotFoundException;
 import esportsclash.pratique.player.application.ports.PlayerRepository;
 import esportsclash.pratique.team.application.ports.TeamRepository;
@@ -23,6 +24,11 @@ public class AddPlayerToTeamCommandHandler implements Command.Handler<AddPlayerT
         var team = teamRepository
                 .findById(command.getTeamId())
                 .orElseThrow(() -> new NotFoundException("Team", command.getTeamId()));
+
+        var teamPlayerBelongsTo = teamRepository.findByPlayerId(player.getId());
+        if (teamPlayerBelongsTo.isPresent()){
+            throw new BadRequestException("This player is already in a team");
+        }
 
         team.addMember(player.getId(), command.getRole());
 

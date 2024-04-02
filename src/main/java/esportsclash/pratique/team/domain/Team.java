@@ -47,6 +47,10 @@ public class Team  extends BaseEntity<Team> {
         return members;
     }
 
+    public boolean isComplete(){
+        return this.members.size() == 5;
+    }
+
     public void addMember(String playerId, Role role) {
         if (this.members.stream().anyMatch(member -> member.playerId.equals(playerId))) {
             throw new IllegalArgumentException("Player already in team");
@@ -64,8 +68,6 @@ public class Team  extends BaseEntity<Team> {
                 role);
         this.members.add(member);
     }
-
-
     public void removeMember(String playerId){
         if (this.members.stream().noneMatch(member -> member.playerId.equals(playerId))) {
             throw  new IllegalArgumentException("Player not in team");

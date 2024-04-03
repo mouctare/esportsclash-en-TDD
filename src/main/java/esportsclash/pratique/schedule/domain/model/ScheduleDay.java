@@ -13,32 +13,17 @@ public class ScheduleDay extends BaseEntity<ScheduleDay> {
     private LocalDate day;
     private Map<Moment, Match> matches;
 
-    public ScheduleDay(){
-        matches = new EnumMap<>(Moment.class);
+    public ScheduleDay(String id, LocalDate day){
+        super(id);
+        this.day = day;
+        this.matches = new EnumMap<>(Moment.class);
     }
-
-  /*  public void organizeAmeeting(Team team1, Team team2, Moment moment){
-        if (matches.containsKey(moment)){
-            throw new IllegalStateException("Moment " + moment + " is already taken");
-        }
-
-        var anyTeamAlreadyPlays = matches.values().stream()
-                .anyMatch(match -> match.featuresTeam(team1.getId()) || match.featuresTeam(team2.getId()));
-
-        if (anyTeamAlreadyPlays){
-            throw new IllegalStateException("One of the teams is already playing");
-        }
-        var match = new Match(
-                UUID.randomUUID().toString(),
-                team1.getId(),
-                team2.getId()
-        );
-
-        matches.put(moment, match);
-
+    public ScheduleDay(String id, LocalDate day, Map<Moment, Match> matches){
+        super(id);
+        this.day = day;
+        this.matches = matches;
     }
-**/
-  public void organizeAmeeting(Team team1, Team team2, Moment moment){
+    public Match organizeAmeeting(Team team1, Team team2, Moment moment){
       // Vérifier si le moment est déjà pris
       if (matches.containsKey(moment)){
           throw new IllegalStateException("Moment " + moment + " is already taken");
@@ -67,21 +52,37 @@ public class ScheduleDay extends BaseEntity<ScheduleDay> {
       // Créer un nouveau match et l'ajouter au calendrier
       var newMatch = new Match(UUID.randomUUID().toString(), team1.getId(), team2.getId());
       matches.put(moment, newMatch);
+
+      return newMatch;
   }
-
-
-    public void cancelAmeeting(){
+  public void cancelAmeeting(String matchId){
+     var moment = matches.keySet().stream()
+             .filter(m -> matches.get(m).getId().equals(matchId))
+             .findFirst();
+     moment.ifPresent(matches::remove);
 
     }
 
     @Override
     public ScheduleDay deepClone() {
-        return null;
+        return new ScheduleDay(
+                getId(),
+                day,
+                matches.keySet().stream()
+                        .collect(
+                                () -> new EnumMap<>(Moment.class),
+                                (map, moment) -> map.put(moment, matches.get(moment).deepClone()),
+                                Map::putAll
+                        )
+        );
     }
 
-    public Optional<Moment> getAt(Moment moment) {
+    public Optional<Match> getAt(Moment moment) {
         return matches.containsKey(moment) ?
-                Optional.of(moment) :
+                Optional.of(matches.get(moment)) :
                 Optional.empty();
+    }
+    public LocalDate getDay(){
+        return day;
     }
 }
